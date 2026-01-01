@@ -2,7 +2,6 @@
                     AUTHENTICATION & CREDENTIAL SERVICES
                           "The Proof-of-Concept"
 ================================================================================
-Author: Mohamed Abucar
 Location: com.authservice.domain.model.services
 
 I. ARCHITECTURAL INTENT

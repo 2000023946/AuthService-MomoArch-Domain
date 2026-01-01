@@ -1,6 +1,6 @@
 ================================================================================
                     DOMAIN RECONSTITUTION ENGINE (DRE)
-                    "Momo-Architecture: Proof-Oriented"
+                    "Requirement-Architecture: Proof-Oriented"
 ================================================================================
 Author: Mohamed Abucar
 Thread: Distributed Systems & Internetwork Design (Georgia Tech)

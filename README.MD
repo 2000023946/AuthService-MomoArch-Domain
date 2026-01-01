@@ -90,7 +90,7 @@ This domain implements a **Proof-Carrying Finite State Machine (FSM)** and acts 
 - **DSL:** Domain rules are expressed via **Requirements → Factories → Proofs**, making violations unrepresentable in code.
 
 This makes **causal correctness** and **business invariants** explicit and automatically enforced.
-
+--- 
 
 ## Some Diagrams Used to help understand the domain
 EERD 
