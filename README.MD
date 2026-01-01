@@ -1,5 +1,5 @@
 # 🛡️ AuthService Domain  
-## The **Momo-Architecture** Standard
+## The **Requirement Architecture** Standard
 
 > **“A boolean is a guess. A Proof is a certainty.”**
 
@@ -9,7 +9,7 @@
 
 This repository contains the **Domain Layer** of an enterprise-grade **Authentication Microservice**, implemented using **Domain-Driven Design (DDD)** and **Clean Architecture** principles.
 
-At its core is a custom architectural standard known as **Momo-Architecture** — a **Proof-Oriented, Capability-Based Security Model** designed to eliminate *implicit trust* from the domain.
+At its core is a custom architectural standard known as **Requirement-Architecture** — a **Proof-Oriented, Capability-Based Security Model** designed to eliminate *implicit trust* from the domain.
 
 Instead of relying on unchecked primitives (booleans, raw strings, timestamps), the domain operates exclusively on **certified proofs** that guarantee correctness, authorization, and origin at **compile time** and **runtime**.
 
@@ -59,9 +59,9 @@ These proofs are:
 - Auditable by design
 
 The domain does not “check flags” — it **verifies history**.
-![Picture Describing how the modules interact. Shows the high level Implementation of the Momo-Architecture](general.png)
+![Picture Describing how the modules interact. Shows the high level Implementation of the Architecture](generalFlow.png)
 
-![Picture Describing The creation of Refresh Token and how the requirement allows easy enforcement of Domain Rules](specific.png)
+![Picture Describing The creation of Refresh Token and how the requirement allows easy enforcement of Domain Rules](specificFlow.png)
 ---
 
 ### 3️⃣ Agile Invariant Enforcement
