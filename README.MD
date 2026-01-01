@@ -78,6 +78,9 @@ This enables **fearless refactoring** of security-critical logic.
 
 ---
 
+## Some Diagrams Used to help understand the domain
+EERD 
+
 ## 📂 Project Structure
 
 ```text
