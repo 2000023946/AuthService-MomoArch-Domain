@@ -33,6 +33,8 @@ Every Domain Aggregate is created or reconstituted through a strict **1-1-1 bind
 
 > An Aggregate **cannot exist** without all three.
 
+![Picture Depicting the Triple-Lock Handshake](3.png)
+
 ---
 
 ### 2️⃣ Proof-Oriented Design
@@ -57,7 +59,9 @@ These proofs are:
 - Auditable by design
 
 The domain does not “check flags” — it **verifies history**.
+![Picture Describing how the modules interact. Shows the high level Implementation of the Momo-Architecture](general.png)
 
+![Picture Describing The creation of Refresh Token and how the requirement allows easy enforcement of Domain Rules](specific.png)
 ---
 
 ### 3️⃣ Agile Invariant Enforcement
