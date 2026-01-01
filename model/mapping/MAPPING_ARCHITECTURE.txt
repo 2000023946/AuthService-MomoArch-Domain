@@ -1,0 +1,63 @@
+===========================================================================
+PROJECT: DOMAIN MAPPING ENGINE
+ARCHITECTURE: HEXAGONAL / DATA TRANSFORMATION LAYER
+===========================================================================
+
+1. OVERVIEW
+-----------
+The Mapping Module is the second stage of the authentication pipeline. 
+Its responsibility is to transform a verified 'JsonString' (produced 
+by the Parser Module) into a structured 'IMap' object that the domain 
+layer can consume without knowing the underlying JSON implementation.
+
+2. THE "SOURCE AGNOSTIC" DESIGN
+-------------------------------
+The MappingRequirement is designed to accept data from two sources:
+A. Direct 'JsonString' value objects.
+B. 'IParsedProof' objects (automatically extracting the internal JSON).
+
+During construction, the Requirement 'normalizes' this data, ensuring 
+the MappingFactory always interacts with a consistent JsonString, 
+regardless of how the data was originally provided.
+
+3. CORE COMPONENTS
+------------------
+- IMap: The primary output interface. A read-only, domain-safe 
+  representation of the token claims.
+- MappingRequirement: The "Order Form" that carries the JSON data and 
+  the IJsonParser dependency. Capability-locked to the MappingFactory.
+- MappingFactory: The "Transformer." It opens the requirement and 
+  orchestrates the conversion from raw JSON to a MapObject.
+- MappingProof: The "Verification Marker." Confirms that the resulting 
+  Map is syntactically valid and ready for domain-level inspection.
+
+4. THE STAGED BUILDER PIPELINE
+------------------------------
+To ensure absolute integrity, MappingRequirement construction follows 
+ a rigid, compile-time enforced sequence:
+ 
+ TargetFactory -> [JsonString OR ParsedProof] -> JsonParser -> Build
+
+This ensures that the MappingService never receives a null parser or 
+unverified data, eliminating the need for runtime null-checks.
+
+5. DOMAIN INTEGRITY (SCHEMA VERIFICATION)
+-----------------------------------------
+The resulting 'IMap' includes capabilities for Schema Verification. 
+This allows the domain layer to verify that the map contains the 
+correct number of attributes (e.g., 'sub', 'roles', 'exp') before 
+converting them into Domain Value Objects.
+
+6. VISIBILITY & ENCAPSULATION
+-----------------------------
+- [PUBLIC]: IMappingService, IMap, MappingRequirement, and Builders.
+- [PRIVATE]: MappingFactory, MapObject, and MappingProof.
+
+This "Black Box" approach ensures that the mapping logic cannot be 
+bypassed. The only way to get a domain-ready Map is through the 
+authorized MappingService.
+
+===========================================================================
+"Data must be verified at the boundary, but it must be structured 
+ before it enters the core."
+===========================================================================

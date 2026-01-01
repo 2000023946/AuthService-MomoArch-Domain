@@ -1,0 +1,62 @@
+1. OVERVIEW
+-----------
+This module provides a type-safe, extensible engine for parsing untrusted 
+strings (JWTs, Opaque Tokens, etc.) into validated JSON proofs. It 
+leverages the Strategy Pattern to allow new token formats to be added 
+without modifying existing code (Open-Closed Principle).
+
+2. THE "DOUBLE-HANDSHAKE" PROTOCOL
+----------------------------------
+To prevent unauthorized data access and ensure type-safety, the module 
+uses a two-phase capability handshake:
+
+Phase A (Construction):
+   A client uses a Staged Builder to create a Requirement (e.g., JwtParserRequirement). 
+   This requirement is "Instance-Locked" to a specific ParserFactory at birth.
+
+Phase B (The Retrieval):
+   The ParsingService passes the Requirement to the ParserRegistry.
+   The Registry resolves the Factory and calls .create(Requirement).
+   The Factory passes ITSELF back to the Requirement. 
+   If (receiver == authorizedTarget), the data is released.
+
+3. CORE COMPONENTS
+------------------
+- IParser: The execution interface. Parameterless parse() method ensures
+  Liskov Substitution across all token types.
+- IParserRequirement: The "Order Form." Holds the raw data and 
+  infrastructure dependencies (Keys, Repos, Libraries).
+- IParserFactory: The "Assembler." Opens the Requirement and builds the 
+  specific Parser implementation.
+- IParsedProof: The "Trust Boundary." A protected wrapper for the 
+  resulting JSON string.
+
+4. VISIBILITY & SECURITY BOUNDARIES
+-----------------------------------
+This module follows a "Black Box" design to prevent internal tampering:
+
+[PUBLIC] - Interfaces, Requirements, Staged Builders, and ParsingService.
+           (Allows the rest of the app to request parsing operations.)
+
+[PRIVATE] - Registry, Factories, and concrete Parsers.
+            (Prevents external code from bypassing the handshake or 
+             corrupting the factory registration list.)
+
+5. EXTENSIBILITY (OPEN-CLOSED)
+------------------------------
+To add a new token format (e.g., SAML):
+1. Create a new sub-package (e.g., samlParser).
+2. Implement Requirement, Factory, Parser, and Proof.
+3. Register the new Factory in the Registry at startup.
+NO core interfaces or existing parser logic needs to change.
+
+6. ERROR HANDLING
+-----------------
+All parsers throw a custom InvalidTokenException (DomainException) 
+on failure. This ensures that downstream logic only ever interacts 
+with verified data (IParsedProof).
+
+===========================================================================
+"Software is not just about functionality; it's about the constraints 
+ we place on the system to prevent misuse."
+===========================================================================

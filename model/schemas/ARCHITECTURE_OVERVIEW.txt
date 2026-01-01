@@ -1,0 +1,82 @@
+===============================================================================
+MODULE: DOMAIN RECONSTITUTION & SCHEMA MANAGEMENT
+===============================================================================
+
+1. OVERVIEW
+-----------
+This module provides a hardened, type-safe infrastructure for rehydrating 
+Domain Aggregates from raw data sources (SQL, NoSQL, JSON). It follows the 
+"Momo-Architecture" style, which prioritizes:
+- Defensive Design (Capability-Guarding)
+- Strict Type Safety (Recursive Generics)
+- Infrastructure Decoupling (Anti-Corruption Layer)
+
+2. CORE CONCEPTS
+----------------
+We avoid "Anemic Domain Models." Aggregates are rich in logic, but to keep 
+them pure, they must be constructed from "Proofs" rather than raw Maps.
+
+The Reconstitution pipeline consists of four pillars:
+
+A. REQUIREMENT (The Ingredients)
+   - A specialized "Locked Box" containing raw data (IMap).
+   - Only the authorized Factory instance has the "Key" to open it.
+   - Enforces construction order via Staged Builders.
+
+B. FACTORY (The Chef)
+   - The only component capable of "Double-Dispatching" with a Requirement.
+   - Maps raw transport types (String, LocalDateTime) to Schema fields.
+
+C. SCHEMA (The Dish)
+   - An immutable, anemic representation of the raw data.
+   - Contains NO business logic.
+
+D. PROOF (The Certificate)
+   - A sealed envelope containing a validated Schema.
+   - Aggregate Roots ONLY accept Proofs in their constructors.
+
+3. DIRECTORY STRUCTURE
+----------------------
+/interfaces         -> Universal contracts for the Handshake Protocol.
+/abstractions       -> Base logic for Requirements and Proofs.
+/user               -> Reconstitution for the UserAggregate.
+/session            -> Reconstitution for the SessionAggregate.
+/token              -> Hierarchical structure for all Auth tokens.
+   /abstractions    -> Common Token logic (IDs, Expiry, Issuance).
+   /access, /mfa... -> Concrete implementations for specific token types.
+/                  -> Orchestrators (Service & Registry).
+
+4. THE SECURITY HANDSHAKE
+-------------------------
+We use Capability-Guarding to prevent unauthorized state manipulation:
+1. Client creates a 'Requirement' bound to a specific Factory instance.
+2. Requirement is passed to 'ReconstitutionService'.
+3. Service retrieves the Factory from the 'SchemaRegistry'.
+4. Factory calls requirement.getMapping(this). 
+   (If 'this' isn't the authorized instance, an exception is thrown).
+
+5. THE REGISTRY POLICY
+----------------------
+The 'SchemaRegistry' is the vault of the system.
+- POLICY: LOCK-ON-STARTUP.
+- Register all factories at the composition root (Main/Config).
+- Call registry.lock() immediately after registration.
+- Once locked, the registry is immutable and thread-safe.
+
+6. EXTENDING THE MODULE
+-----------------------
+To add a new Schema (e.g., BiometricSchema):
+1. Define the Schema, Proof, Requirement, and Factory.
+2. Inherit from the appropriate abstractions (AbstractSchema... or AbstractToken...).
+3. Implement the Staged Builder in the Requirement.
+4. Add the Factory to the Registry in the Application Configuration.
+
+7. ARCHITECT'S NOTE (Graduation Target: May 2027)
+-------------------------------------------------
+This design adheres strictly to:
+- Open-Closed Principle (OCP): Add tokens without changing the Service.
+- Liskov Substitution Principle (LSP): All factories share a stable contract.
+- Interface Segregation Principle (ISP): Requirements only expose what is needed.
+
+===============================================================================
+[END OF DOCUMENT]
