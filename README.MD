@@ -82,6 +82,16 @@ This enables **fearless refactoring** of security-critical logic.
 ![Picture Describing The creation of Refresh Token and how the requirement allows easy enforcement of Domain Rules](specificFlow.png)
 ---
 
+### ⚙️ FSM & Internal DSL
+
+This domain implements a **Proof-Carrying Finite State Machine (FSM)** and acts as a **compiler-enforced internal DSL**:
+
+- **FSM:** Every Aggregate transition emits an immutable **Proof**, ensuring invalid states are impossible.
+- **DSL:** Domain rules are expressed via **Requirements → Factories → Proofs**, making violations unrepresentable in code.
+
+This makes **causal correctness** and **business invariants** explicit and automatically enforced.
+
+
 ## Some Diagrams Used to help understand the domain
 EERD 
 ![EERD of the Domain](eerd.png)
