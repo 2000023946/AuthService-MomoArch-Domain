@@ -59,9 +59,8 @@ These proofs are:
 - Auditable by design
 
 The domain does not “check flags” — it **verifies history**.
-![Picture Describing how the modules interact. Shows the high level Implementation of the Architecture](generalFlow.png)
 
-![Picture Describing The creation of Refresh Token and how the requirement allows easy enforcement of Domain Rules](specificFlow.png)
+![Picture Describing how the modules interact. Shows the high level Implementation of the Architecture](generalFlow.png)
 ---
 
 ### 3️⃣ Agile Invariant Enforcement
@@ -80,12 +79,15 @@ If a developer attempts to:
 
 This enables **fearless refactoring** of security-critical logic.
 
+![Picture Describing The creation of Refresh Token and how the requirement allows easy enforcement of Domain Rules](specificFlow.png)
 ---
 
 ## Some Diagrams Used to help understand the domain
 EERD 
-
+![EERD of the Domain](eerd.png)
 UML
+![UML of the Domain](uml.png)
+---
 
 ## 📂 Project Structure
 
